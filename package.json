@@ -46,6 +46,7 @@
     "lite-youtube-embed": "^0.3.3",
     "medium-zoom": "^1.1.0",
     "mermaid": "^11.6.0",
+    "ol-simple-point": "1.0.8",
     "packery": "^3.0.0",
     "prettier": "^3.5.3",
     "prettier-plugin-go-template": "^0.0.15",
@@ -115,6 +116,14 @@
     {
       "from": "node_modules/medium-zoom/dist/medium-zoom.min.js",
       "to": "assets/lib/zoom/zoom.min.js"
+    },
+    {
+      "from": "node_modules/ol-simple-point/dist/ol-simple-point.min.esm.js",
+      "to": "assets/lib/ol-simple-point/ol-simple-point.min.esm.js"
+    },
+    {
+      "from": "node_modules/ol-simple-point/dist/ol-simple-point.min.css",
+      "to": "assets/lib/ol-simple-point/ol-simple-point.min.css"
     }
   ],
   "dependencies": {

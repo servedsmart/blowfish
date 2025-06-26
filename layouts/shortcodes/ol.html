@@ -1,0 +1,81 @@
+{{ $mapId := printf "ol-map-%d4" .Ordinal }}
+{{ $iconId := printf "ol-icon-%d4" .Ordinal }}
+{{ $popupId := printf "ol-popup-%d4" .Ordinal }}
+
+{{ $centerMap := .Get "centerMap" | default false }}
+{{ $classes := "flex relative" }}
+{{ if $centerMap }}
+  {{ $classes = delimit (slice $classes "justify-center") " " }}
+{{ end }}
+
+{{ $markerIcon := resources.Get "icons/location-dot.svg" }}
+
+{{ $extraCopyrightURL := .Get "extraCopyrightURL" }}
+{{ $extraCopyrightName := .Get "extraCopyrightName" | default $extraCopyrightURL }}
+
+{{ $tileBaseURL := .Get "tileBaseURL" | default "https://tile.openstreetmap.org" }}
+
+{{ $widthEqHeight := .Get "widthEqHeight" | default "true" }}
+{{ $height := .Get "height" | default "400px" }}
+{{ $width := .Get "width" | default $height }}
+
+{{ $centerX := .Get "centerX" }}
+{{ $centerY := .Get "centerY" }}
+{{ $zoom := .Get "zoom" | default 15 }}
+{{ $minZoom := .Get "minZoom" | default 10 }}
+{{ $maxZoom := .Get "maxZoom" | default 20 }}
+
+{{ $pointPopup := .Get "pointPopup" }}
+
+{{ $pointX := .Get "pointX" }}
+{{ $pointY := .Get "pointY" }}
+
+{{ $olCSS := resources.Get "lib/ol-simple-point/ol-simple-point.min.css" | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+
+
+<div class="{{ $classes }}">
+  <div id="{{ $mapId }}" class="ol-map w-full h-full not-prose"></div>
+</div>
+
+<img
+  id="{{ $iconId }}"
+  class="ol-icon"
+  src="{{ $markerIcon.RelPermalink }}"
+  draggable="false"
+  {{ with $pointPopup }}
+    alt="{{- . -}}"
+  {{ end }}
+  >
+
+{{ if and $pointX $pointY }}
+  <div id="{{ $popupId }}" class="ol-popup">
+    {{- $pointPopup -}}
+  </div>
+{{ end }}
+
+{{ $olLib := resources.Get "lib/ol-simple-point/ol-simple-point.min.esm.js" | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+<script type="module" src="{{ $olLib.RelPermalink }} " integrity="{{ $olLib.Data.Integrity }}"></script>
+
+{{ $olConfig := resources.Get "js/ol-simple-point.js" | resources.Minify | resources.Fingerprint (.Site.Params.fingerprintAlgorithm | default "sha512") }}
+<script
+  defer
+  src="{{ $olConfig.RelPermalink }} "
+  integrity="{{ $olConfig.Data.Integrity }}"
+  data-map-id="{{ $mapId }}"
+  data-icon-id="{{ $iconId }}"
+  data-popup-id="{{ $popupId }}"
+  data-stylesheet="{{ $olCSS.RelPermalink }}"
+  data-stylesheet-hash="{{ $olCSS.Data.Integrity }}"
+  data-extra-copyright-url="{{- $extraCopyrightURL -}}"
+  data-extra-copyright-name="{{- $extraCopyrightName -}}"
+  data-tile-base-url="{{- $tileBaseURL -}}"
+  data-width-eq-height="{{- $widthEqHeight -}}"
+  data-height="{{- $height -}}"
+  data-width="{{- $width -}}"
+  data-center-x="{{- $centerX -}}"
+  data-center-y="{{- $centerY -}}"
+  data-zoom="{{- $zoom -}}"
+  data-min-zoom="{{- $minZoom -}}"
+  data-max-zoom="{{- $maxZoom -}}"
+  data-point-x="{{- $pointX -}}"
+  data-point-y="{{- $pointY -}}"></script>

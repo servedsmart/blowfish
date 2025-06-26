@@ -674,6 +674,37 @@ You can see some additional Mermaid examples on the [diagrams and flowcharts sam
 
 <br/><br/><br/>
 
+## Openlayers
+
+<!-- prettier-ignore-start -->
+| Parameter            | Description                                                                                                    |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- |
+| `centerMap`          | Optional boolean that centers the map element, default is `false`                                              |
+| `extraCopyrightURL`  | Optional string with URL that sets the copyright link, for example `"https://example.com/copyright"`           |
+| `extraCopyrightName` | Optional string with URL that sets the copyright text, default is equal to `extraCopyrightURL`                 |
+| `tileBaseURL`        | Optional string with base URL of the raster tile provider, default is `"https://tile.openstreetmap.org"`       |
+| `mapHeight`          | Optional string with height of the map element, default is `"400px"`                                           |
+| `mapWidth`           | Optional string with width of the map element, default is equal to `mapHeight`                                 |
+| `centerX`            | Optional float value with a coordinate (Longitude) for the center of the map, for example `-74.045301`         |
+| `centerY`            | Optional float value with a coordinate (Latitude) for the center of the map, for, for example `40.690136`      |
+| `zoom`               | Optional integer that sets the default zoom, default is `15`                                                   |
+| `minZoom`            | Optional integer that sets the minimum zoom, default is `10`                                                   |
+| `maxZoom`            | Optional integer that sets the maximum zoom, default is `20`                                                   |
+| `pointPopup`         | Optional string with text for a marker tooltip, for example `"The Statue of Liberty"`                          |
+| `pointX`             | Optional float value with a coordinate (Longitude) for an optional marker in the map, for example `-74.044512` |
+| `pointY`             | Optional float value with a coordinate (Latitude) for an optional marker in the map, for example `40.689272`   |
+<!-- prettier-ignore-end -->
+
+**Example:**
+
+```md
+{{</* ol centerMap=true pointPopup="The Statue of Liberty" centerX=40.690136 centerY=-74.045301 zoom=16 minZoom=5 maxZoom=20 pointX=-74.044512 pointY=40.689272 */>}}
+```
+
+{{< ol centerMap=true pointPopup="The Statue of Liberty" centerX=-74.045301 centerY=40.690136 zoom=17 minZoom=6 maxZoom=19 pointX=-74.044512 pointY=40.689272 >}}
+
+<br/><br/><br/>
+
 ## Swatches
 
 `swatches` outputs a set of up to three different colors to showcase color elements like a color palette. This shortcode takes the `HEX` codes of each color and creates the visual elements for each.

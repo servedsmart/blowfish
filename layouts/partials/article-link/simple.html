@@ -25,62 +25,73 @@
   {{ $articleClasses = delimit (slice $articleClasses "max-w-prose") " " }}
 {{ end }}
 
+
 <div class="{{ $articleClasses }}">
-  <a {{ partial "article-link/_external-link.html" . | safeHTMLAttr }} class="absolute inset-0" aria-label="{{ $.Title }}"></a>
+  <a
+    {{ partial "article-link/_external-link.html" . | safeHTMLAttr }}
+    class="absolute inset-0"
+    aria-label="{{ $.Title }}"></a>
   {{- with $.Params.images -}}
     {{- range first 6 . }}
-      <meta property="og:image" content="{{ . | absURL }}" />{{ end -}}
-    {{- else -}}
-      {{ $images := $.Resources.ByType "image" }}
-      {{ $featuredImage := $images.GetMatch "*feature*" }}
-      {{ if not $featuredImage }}
-        {{ $featuredImage = $images.GetMatch "{*cover*,*thumbnail*}" }}
-      {{ end }}
-      {{ if and (not $featuredImage) .Params.featureimage }}
-        {{ $featuredImage = resources.GetRemote .Params.featureimage }}
-      {{ end }}
-      {{ if not $featuredImage }}
-        {{ $featuredImage = resources.Get .Site.Params.defaultFeaturedImage }}
-      {{ end }}
-      {{ $disableImageOptimization := .Page.Site.Params.disableImageOptimization | default false }}
-      {{ if and ($featuredImage) (not (or ($disableImageOptimization) (strings.HasSuffix $featuredImage.Name ".svg"))) }}
-        {{ $featuredImage = $featuredImage.Resize "600x" }}
-      {{ end }}
-      {{ if .Params.hideFeatureImage }}
-        {{ $featuredImage = false }}
-      {{ end }}
-      {{ with $featuredImage }}
-        {{ $className := printf "background-image-%s" (md5 .RelPermalink) }}
-        <div class="{{ $articleImageClasses }} {{ $className }}"></div>
-      {{ else }}
-        {{ with $.Site.Params.images }}
-          <meta property="og:image" content="{{ index . 0 | absURL }}" />
-        {{ end }}
+      <meta property="og:image" content="{{ . | absURL }}">
+    {{ end -}}
+  {{- else -}}
+    {{ $images := $.Resources.ByType "image" }}
+    {{ $featuredImage := $images.GetMatch "*feature*" }}
+    {{ if not $featuredImage }}
+      {{ $featuredImage = $images.GetMatch "{*cover*,*thumbnail*}" }}
+    {{ end }}
+    {{ if and (not $featuredImage) .Params.featureimage }}
+      {{ $featuredImage = resources.GetRemote .Params.featureimage }}
+    {{ end }}
+    {{ if not $featuredImage }}
+      {{ $featuredImage = resources.Get .Site.Params.defaultFeaturedImage }}
+    {{ end }}
+    {{ $disableImageOptimization := .Page.Site.Params.disableImageOptimization | default false }}
+    {{ if and ($featuredImage) (not (or ($disableImageOptimization) (strings.HasSuffix $featuredImage.Name ".svg"))) }}
+      {{ $featuredImage = $featuredImage.Resize "600x" }}
+    {{ end }}
+    {{ if .Params.hideFeatureImage }}
+      {{ $featuredImage = false }}
+    {{ end }}
+    {{ with $featuredImage }}
+      {{ $className := printf "background-image-%s" (md5 .RelPermalink) }}
+      <div class="{{ $articleImageClasses }} {{ $className }}"></div>
+    {{ else }}
+      {{ with $.Site.Params.images }}
+        <meta property="og:image" content="{{ index . 0 | absURL }}">
       {{ end }}
     {{ end }}
+  {{ end }}
+
 
   <div class="{{ $articleInnerClasses }}">
     <div class="items-center text-left text-xl font-semibold">
-  {{ with .Params.externalUrl }}
-      <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral">{{ $.Title | emojify }}
-        <span class="text-xs align-top cursor-default text-neutral-400 dark:text-neutral-500">
-          <span class="rtl:hidden">&#8599;</span>
-          <span class="ltr:hidden">&#8598;</span>
-        </span>
-      </div>
-  {{ else }}
-    <div class="font-bold text-xl text-neutral-800 decoration-primary-500 hover:underline hover:underline-offset-2 dark:text-neutral">{{ .Title | emojify }}</div>
-  {{ end }}
-    {{ if and .Draft .Site.Params.article.showDraftLabel }}
-      <div class=" ltr:ml-2 rtl:mr-2">{{ partial "badge.html" (i18n "article.draft" | emojify) }}</div>
-    {{ end }}
-    {{ if templates.Exists "partials/extend-article-link.html" }}
-      {{ partial "extend-article-link.html" . }}
-    {{ end }}
+      {{ with .Params.externalUrl }}
+        <div
+          class="decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
+          {{ $.Title | emojify }}
+          <span class="cursor-default align-top text-xs text-neutral-400 dark:text-neutral-500">
+            <span class="rtl:hidden">&#8599;</span>
+            <span class="ltr:hidden">&#8598;</span>
+          </span>
+        </div>
+      {{ else }}
+        <div
+          class="decoration-primary-500 dark:text-neutral text-xl font-bold text-neutral-800 hover:underline hover:underline-offset-2">
+          {{ .Title | emojify }}
+        </div>
+      {{ end }}
+      {{ if and .Draft .Site.Params.article.showDraftLabel }}
+        <div class="ltr:ml-2 rtl:mr-2">{{ partial "badge.html" (i18n "article.draft" | emojify) }}</div>
+      {{ end }}
+      {{ if templates.Exists "partials/extend-article-link.html" }}
+        {{ partial "extend-article-link.html" . }}
+      {{ end }}
     </div>
     <div class="text-sm text-neutral-500 dark:text-neutral-400">{{ partial "article-meta/basic.html" . }}</div>
     {{ if .Params.showSummary | default (.Site.Params.list.showSummary | default false) }}
-      <div class="py-1 max-w-fit prose dark:prose-invert">{{ .Summary | plainify }}</div>
+      <div class="prose dark:prose-invert max-w-fit py-1">{{ .Summary | plainify }}</div>
     {{ end }}
   </div>
   <div class="px-6 pt-4 pb-2"></div>
